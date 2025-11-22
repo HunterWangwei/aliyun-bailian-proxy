@@ -1,0 +1,21 @@
+version: '3.8'
+
+services:
+  aliyun-bailian-proxy:
+    build: .
+    container_name: aliyun-bailian-proxy
+    ports:
+      - "8081:8080"
+    environment:
+      - ALIYUN_APP_ID=${ALIYUN_APP_ID}
+      - ALIYUN_API_KEY=${ALIYUN_API_KEY}
+      - PORT=8080
+      - ALIYUN_BASE_URL=${ALIYUN_BASE_URL:-https://dashscope.aliyuncs.com}
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+
